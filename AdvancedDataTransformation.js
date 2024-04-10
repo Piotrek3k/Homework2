@@ -70,19 +70,27 @@ const stringifyValue = (value) => {
 }
 
 const convertToNumber = (value) => {
-    try{
+    //funtion that converts an argument to a number if possible
+    result = 0
+    try{    // first the function checks if the argument has the string or bigint type because the unary plus operator doesn't deal well with those two, parseFloat is better here
         if(typeof value === 'string' || typeof value === 'bigint'){
-            return parseFloat(value);
+            result = parseFloat(value);
         }
-        else{
-            return +value
+        else{// in other situations the function use the unary plus operator 
+           result = +value
         }
     }
     catch (err)
     {
+        //throw new Error("Argument cannot be represented as a number")
         console.log("error -----------------------------------------------------")
     }
-    
+    if(isNaN(result))
+    {
+        //throw new Error("Argument cannot be represented as a number")
+        console.log("error -----------------------------------------------")
+    }
+    return result
     
 }
 
@@ -187,4 +195,13 @@ console.log(convertToNumber("1.8"))
 console.log(convertToNumber("4"))
 console.log(convertToNumber(true))
 console.log(convertToNumber("true"))
-console.log(convertToNumber(1.8))
+console.log(convertToNumber(BigInt(1230)))
+console.log(convertToNumber(-5))
+console.log(convertToNumber(-5.5))
+console.log(convertToNumber("-5.5"))
+console.log(convertToNumber("-3"))
+console.log(convertToNumber("234abv"))
+console.log(convertToNumber("abv234"))
+console.log(convertToNumber(Symbol("1")))
+console.log("ugabuga")
+console.log(convertToNumber())
