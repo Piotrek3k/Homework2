@@ -1,36 +1,36 @@
 
 const addValues = (value1, value2) => {
     // function to add numbers in different data types
-    let result = 0
-    try {
-        result = +(value1) + +(value2)
-        // if(isNaN(result)){
-        //     console.log("here")
-        //     try{
-        //         console.log("tu")
-        //         result = parseInt(value1) + parseInt(value2)
-        //         console.log(parseInt(value1))
-        //         console.log("result: " + result)
-        //         return result
-        //     }
-        //     catch (err) {
-        //         console.log("error in first")
-        //     }
-        // }
-        return result
-    }
-    catch (err) {
-        try{
-            result = parseInt(value1) + parseInt(value2)
-            return result
-        }
-        catch(err) 
-        {
-            console.log("error2: typeof1: "+ typeof value1 + "; typeof2: " + typeof value2)
-        }
-        console.log("error: typeof1: " + typeof value1 + "; typeof2: " + typeof value2)
-    }
-
+    // let result = 0
+    // try {
+    //     result = +(value1) + +(value2)
+    //     // if(isNaN(result)){
+    //     //     console.log("here")
+    //     //     try{
+    //     //         console.log("tu")
+    //     //         result = parseInt(value1) + parseInt(value2)
+    //     //         console.log(parseInt(value1))
+    //     //         console.log("result: " + result)
+    //     //         return result
+    //     //     }
+    //     //     catch (err) {
+    //     //         console.log("error in first")
+    //     //     }
+    //     // }
+    //     return result
+    // }
+    // catch (err) {
+    //     try{
+    //         result = parseInt(value1) + parseInt(value2)
+    //         return result
+    //     }
+    //     catch(err) 
+    //     {
+    //         console.log("error2: typeof1: "+ typeof value1 + "; typeof2: " + typeof value2)
+    //     }
+    //     console.log("error: typeof1: " + typeof value1 + "; typeof2: " + typeof value2)
+    // }
+    return convertToNumber(value1) + convertToNumber(value2)
 }
 
 const invertBoolean = (value) => {
@@ -61,6 +61,8 @@ const stringifyValue = (value) => {
                 return value.toString();
             case "object":
                 return JSON.stringify(value);
+            case "date":
+                return value.toString();
         }
     }
     catch(err) {
@@ -72,6 +74,9 @@ const stringifyValue = (value) => {
 const convertToNumber = (value) => {
     //funtion that converts an argument to a number if possible
     result = 0
+    if(typeof value === 'date'){
+        return Date.parse(value)
+    }
     try{    // first the function checks if the argument has the string or bigint type because the unary plus operator doesn't deal well with those two, parseFloat is better here
         if(typeof value === 'string' || typeof value === 'bigint'){
             result = parseFloat(value);
@@ -95,7 +100,14 @@ const convertToNumber = (value) => {
 }
 
 const coerceToType = (value, type) => {
-
+    switch (typeof type) {
+        case 'string':
+            return stringifyValue(value)
+        case 'number':
+            return convertToNumber(value)
+        case 'boolean':
+            return Boolean(value)
+    }
 }
 value = 123
 symbol = Symbol("foo")
@@ -146,10 +158,10 @@ const anarray = [1,5,6]
 // console.log(addValues(Symbol("2"),2))   // symbol number
 // console.log(addValues("2.56","3.34"))   // stringfloat stringfloat
 
-// console.log(addValues(2.22,3.33))   // numberfloat numberfloat   --- jest zle
-// console.log(addValues(2.22,"3.33"))   // numberfloat stringfloat
-// console.log(addValues("2.22","3.33"))   // numberfloat stringfloat
-// console.log(addValues("2.22",3.33))   // numberfloat stringfloat
+console.log(addValues(2.22,3.33))   // numberfloat numberfloat   --- jest zle
+console.log(addValues(2.22,"3.33"))   // numberfloat stringfloat
+console.log(addValues("2.22","3.33"))   // numberfloat stringfloat
+console.log(addValues("2.22",3.33))   // numberfloat stringfloat
 
 // console.log(addValues(1.2,"a"))
 // console.log(addValues("b","a"))
@@ -188,20 +200,29 @@ const anarray = [1,5,6]
 // console.log(+("adf3"))
 
 /////////////////////////////////////////
+// const event = new Date('August 19, 1975 23:15:30');
+// console.log(stringifyValue(event))
+// console.log(convertToNumber(event))
 
-console.log(convertToNumber(1))
-console.log(convertToNumber(1.8))
-console.log(convertToNumber("1.8"))
-console.log(convertToNumber("4"))
-console.log(convertToNumber(true))
-console.log(convertToNumber("true"))
-console.log(convertToNumber(BigInt(1230)))
-console.log(convertToNumber(-5))
-console.log(convertToNumber(-5.5))
-console.log(convertToNumber("-5.5"))
-console.log(convertToNumber("-3"))
-console.log(convertToNumber("234abv"))
-console.log(convertToNumber("abv234"))
-console.log(convertToNumber(Symbol("1")))
-console.log("ugabuga")
-console.log(convertToNumber())
+// console.log(convertToNumber(1))
+// console.log(convertToNumber(1.8))
+// console.log(convertToNumber("1.8"))
+// console.log(convertToNumber("4"))
+// console.log(convertToNumber(true))
+// console.log(convertToNumber("true"))
+// console.log(convertToNumber(BigInt(1230)))
+// console.log(convertToNumber(-5))
+// console.log(convertToNumber(-5.5))
+// console.log(convertToNumber("-5.5"))
+// console.log(convertToNumber("-3"))
+// console.log(convertToNumber("234abv"))
+// console.log(convertToNumber("abv234"))
+// console.log(convertToNumber(Symbol("1")))
+// console.log("ugabuga")
+// console.log(convertToNumber())
+
+///////////////////////////////////////////
+
+// console.log(Boolean(-5))
+
+console.log(2.22 + 3.35)
