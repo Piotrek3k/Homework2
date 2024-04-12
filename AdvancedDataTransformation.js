@@ -112,7 +112,3 @@ const AdvancedDataTransformation = {
     } 
 },
 }
-
-console.log(AdvancedDataTransformation.addValues(213,"123"))
-console.log(AdvancedDataTransformation.concatValues(213,"123"))
-console.log(AdvancedDataTransformation.invertBoolean(true))
