@@ -9,7 +9,6 @@ const AdvancedDataTransformation = {
     catch(err){
         return result // if converting back to type of the first value is not possible, function returns result as a number  
     }   
-    
     },
 
     invertBoolean: function (value) {
@@ -47,7 +46,6 @@ const AdvancedDataTransformation = {
     catch(err) {
         throw new Error ("This data type cannot be converted to string")
     }
-    
     },
 
     convertToNumber: function (value) {
@@ -73,7 +71,6 @@ const AdvancedDataTransformation = {
         throw new Error("Argument cannot be represented as a number")
     }
     return result
-    
     },
 
     coerceToType: function (value, type) {
@@ -99,7 +96,6 @@ const AdvancedDataTransformation = {
     }   
     throw new Error("argument cannot be converted into given type")
 },
-
     concatValues: function (value1,value2) {
     // additional function to concat values as strings
     const type = typeof value1
