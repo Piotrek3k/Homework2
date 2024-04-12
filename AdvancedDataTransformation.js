@@ -1,47 +1,26 @@
+const AdvancedDataTransformation = {
+    addValues: function (value1, value2) {
+    // function to add arguments having different data types
+    const type = typeof value1
+    const result = this.convertToNumber(value1) + this.convertToNumber(value2)  // function converts both arguments to numbers and adds them if possible
+    try{
+        return this.coerceToType(result, type)   // in the end, result is converted to type of the first value if possible
+    }
+    catch(err){
+        return result // if converting back to type of the first value is not possible, function returns result as a number  
+    }   
+    
+    },
 
-const addValues = (value1, value2) => {
-    // function to add numbers in different data types
-    // let result = 0
-    // try {
-    //     result = +(value1) + +(value2)
-    //     // if(isNaN(result)){
-    //     //     console.log("here")
-    //     //     try{
-    //     //         console.log("tu")
-    //     //         result = parseInt(value1) + parseInt(value2)
-    //     //         console.log(parseInt(value1))
-    //     //         console.log("result: " + result)
-    //     //         return result
-    //     //     }
-    //     //     catch (err) {
-    //     //         console.log("error in first")
-    //     //     }
-    //     // }
-    //     return result
-    // }
-    // catch (err) {
-    //     try{
-    //         result = parseInt(value1) + parseInt(value2)
-    //         return result
-    //     }
-    //     catch(err) 
-    //     {
-    //         console.log("error2: typeof1: "+ typeof value1 + "; typeof2: " + typeof value2)
-    //     }
-    //     console.log("error: typeof1: " + typeof value1 + "; typeof2: " + typeof value2)
-    // }
-    return convertToNumber(value1) + convertToNumber(value2)
-}
-
-const invertBoolean = (value) => {
+    invertBoolean: function (value) {
     // function that checks if value is boolean and returns its inverted value
     if(typeof value === 'boolean'){
         return !value;
     }
     throw new Error ('Invalid boolean value');
-}
+    },
 
-const stringifyValue = (value) => {
+    stringifyValue: function (value) {
     // function that returns the stringified value of the given parameter
     try{
         switch(typeof value){
@@ -69,9 +48,9 @@ const stringifyValue = (value) => {
         throw new Error ("This data type cannot be converted to string")
     }
     
-}
+    },
 
-const convertToNumber = (value) => {
+    convertToNumber: function (value) {
     //funtion that converts an argument to a number if possible
     result = 0
     if(typeof value === 'date'){
@@ -87,142 +66,53 @@ const convertToNumber = (value) => {
     }
     catch (err)
     {
-        //throw new Error("Argument cannot be represented as a number")
-        console.log("error -----------------------------------------------------")
+        throw new Error("Argument cannot be represented as a number")
     }
-    if(isNaN(result))
+    if(isNaN(result))   // if the argument is NaN the error is thrown
     {
-        //throw new Error("Argument cannot be represented as a number")
-        console.log("error -----------------------------------------------")
+        throw new Error("Argument cannot be represented as a number")
     }
     return result
     
-}
+    },
 
-const coerceToType = (value, type) => {
-    switch (typeof type) {
-        case 'string':
-            return stringifyValue(value)
-        case 'number':
-            return convertToNumber(value)
-        case 'boolean':
-            return Boolean(value)
+    coerceToType: function (value, type) {
+    // function that converts given value to a given type
+    try{
+        switch (typeof type) {
+            case 'string':
+                return this.stringifyValue(value)
+            case 'number':
+                return this.convertToNumber(value)
+            case 'boolean':
+                return Boolean(value)
+            case 'symbol':
+                return Symbol(value)
+            case 'bigint':
+                return BigInt(value)
+            case 'date':
+                return new Date(value)
+        }
     }
+    catch(err){
+        throw new Error("argument cannot be converted into given type")
+    }   
+    throw new Error("argument cannot be converted into given type")
+},
+
+    concatValues: function (value1,value2) {
+    // additional function to concat values as strings
+    const type = typeof value1
+    const result = this.stringifyValue(value1).concat(this.stringifyValue(value2))
+    try{
+        return this.coerceToType(result, type)   // in the end, result is converted to type of the first value if possible
+    }
+    catch(err){
+        return result // if converting back to type of the first value is not possible, function returns result as a string  
+    } 
+},
 }
-value = 123
-symbol = Symbol("foo")
-bignumber = BigInt(90073423234324)
-const anarray = [1,5,6]
-// console.log(typeof anarray)
-//console.log(invertBoolean(0))
-//console.log((typeof(false)))
-// console.log(false.toString())   // boolean
-// console.log(value.toString()) // number
-//console.log(typeof(BigInt(900719925474099164737821478432943900491309841089403939045874423423234423)))    // bigint
-// console.log(bignumber.toString())    // bigint
-// console.log(undefined.toString()) // undefined
-// console.log(null.toString()) // null
-// console.log(symbol.toString()) // string
-// console.log(typeof([1,3,4]))
-// console.log(typeof(invertBoolean))
-// console.log(typeof(anarray))
 
-/////////////////////////////////////
-
-// console.log(stringifyValue(false))
-// console.log(stringifyValue(345))
-// console.log(stringifyValue("goer"))
-// console.log(stringifyValue(bignumber))
-// console.log(stringifyValue(undefined))
-// console.log(stringifyValue(null))
-// console.log(stringifyValue(symbol))
-// console.log(stringifyValue(anarray))
-// console.log(stringifyValue(invertBoolean))
-
-/////////////////////////////////////
-
-// console.log(addValues(1,2)) // number number
-// console.log(addValues(1,"2"))   // number string
-// console.log(addValues("2",1))   // string number
-// console.log(addValues("2","3"))   // string number
-// console.log(addValues(false,1))   // boolean number
-// console.log(addValues("2",true)) // string boolean
-// console.log(addValues(true,false))   // boolean boolean
-// console.log(addValues(false,false))   // boolean boolean
-// console.log(addValues(true,true))   // boolean boolean
-// console.log(addValues(undefined,1))   // undefined number --- NaN
-// console.log(addValues(0,null))   // number null
-
-// console.log(addValues(BigInt(1200),12))   // bigint number
-// console.log(addValues(BigInt(20),BigInt(31)))   // bigint bigint
-// console.log(addValues(Symbol("2"),2))   // symbol number
-// console.log(addValues("2.56","3.34"))   // stringfloat stringfloat
-
-console.log(addValues(2.22,3.33))   // numberfloat numberfloat   --- jest zle
-console.log(addValues(2.22,"3.33"))   // numberfloat stringfloat
-console.log(addValues("2.22","3.33"))   // numberfloat stringfloat
-console.log(addValues("2.22",3.33))   // numberfloat stringfloat
-
-// console.log(addValues(1.2,"a"))
-// console.log(addValues("b","a"))
-// console.log(addValues("b",false))
-// console.log(addValues("",null))
-
-
-// console.log(parseFloat(1)+parseFloat(false))
-// console.log((parseFloat(1)+parseFloat(false) == NaN))
-// console.log(typeof NaN)
-// console.log(typeof (parseFloat(1)+parseFloat(false)))
-
-// console.log((addValues("2",true)))
-// console.log(isNaN(addValues("2",true)))
-
-// console.log(parseInt(false))
-// console.log(parseInt("123"))
-// console.log(parseInt("123abc"))
-// console.log(parseInt("abc"))
-// console.log(parseInt("123.123"))
-// console.log(parseInt("1a2d3"))
-// console.log(parseInt("adf3"))
-
-// console.log(parseFloat("123"))
-// console.log(parseFloat("123abc"))
-// console.log(parseFloat("abc"))
-// console.log(parseFloat("123.123"))
-// console.log(parseFloat("1a2d3"))
-// console.log(parseFloat("adf3"))
-
-// console.log(+("123"))
-// console.log(+("123abc"))
-// console.log(+("abc"))
-// console.log(+("123.123"))
-// console.log(+("1a2d3"))
-// console.log(+("adf3"))
-
-/////////////////////////////////////////
-// const event = new Date('August 19, 1975 23:15:30');
-// console.log(stringifyValue(event))
-// console.log(convertToNumber(event))
-
-// console.log(convertToNumber(1))
-// console.log(convertToNumber(1.8))
-// console.log(convertToNumber("1.8"))
-// console.log(convertToNumber("4"))
-// console.log(convertToNumber(true))
-// console.log(convertToNumber("true"))
-// console.log(convertToNumber(BigInt(1230)))
-// console.log(convertToNumber(-5))
-// console.log(convertToNumber(-5.5))
-// console.log(convertToNumber("-5.5"))
-// console.log(convertToNumber("-3"))
-// console.log(convertToNumber("234abv"))
-// console.log(convertToNumber("abv234"))
-// console.log(convertToNumber(Symbol("1")))
-// console.log("ugabuga")
-// console.log(convertToNumber())
-
-///////////////////////////////////////////
-
-// console.log(Boolean(-5))
-
-console.log(2.22 + 3.35)
+console.log(AdvancedDataTransformation.addValues(213,"123"))
+console.log(AdvancedDataTransformation.concatValues(213,"123"))
+console.log(AdvancedDataTransformation.invertBoolean(true))
