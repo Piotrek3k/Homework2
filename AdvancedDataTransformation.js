@@ -1,14 +1,35 @@
 const AdvancedDataTransformation = {
     addValues: function (value1, value2) {
+    let result = 0
     // function to add arguments having different data types
-    const type = typeof value1
-    const result = this.convertToNumber(value1) + this.convertToNumber(value2)  // function converts both arguments to numbers and adds them if possible
-    try{
-        return this.coerceToType(result, type)   // in the end, result is converted to type of the first value if possible
+    // checking if both values are the same type
+    if(typeof value1 === typeof value2){
+        try{ 
+            switch(typeof value1){ // adding numberical values in both types and converting the result to a previous type          
+            case 'number':
+                result = value1 + value2
+                break
+            case 'string':
+                result = this.stringifyValue(this.convertToNumber(value1)+this.convertToNumber(value2)) 
+                break
+            case 'boolean':
+                result = this.coerceToType(this.convertToNumber(value1)+this.convertToNumber(value2),'boolean')
+                break
+            case 'bigint': 
+                result = value1 + value2
+                break
+        }}
+        catch (err){
+            throw new Error("Function does not support addition of these values")
+        }
     }
-    catch(err){
-        return result // if converting back to type of the first value is not possible, function returns result as a number  
-    }   
+    else {
+        throw new Error("Values have different types")
+    }
+    if(typeof(result)!=='bigint' && isNaN(result)){  // checking for NaN
+        throw new Error("Addition of these values results in NaN")
+    }
+        return result
     },
 
     invertBoolean: function (value) {
@@ -20,28 +41,12 @@ const AdvancedDataTransformation = {
     },
 
     stringifyValue: function (value) {
-    // function that returns the stringified value of the given parameter
+    // function that returns the stringified value of the given argument
+    if(typeof value === 'object'){
+        return JSON.stringify(value)
+    }
     try{
-        switch(typeof value){
-            case 'boolean':
-                return value.toString();
-            case 'number':
-                return value.toString();
-            case 'string': 
-                return value;
-            case 'bigint':
-                return value.toString();
-            case 'undefined':
-                return "undefined";
-            case 'null': 
-                return "null";
-            case "symbol":
-                return value.toString();
-            case "object":
-                return JSON.stringify(value);
-            case "date":
-                return value.toString();
-        }
+        return value.toString()
     }
     catch(err) {
         throw new Error ("This data type cannot be converted to string")
@@ -76,7 +81,7 @@ const AdvancedDataTransformation = {
     coerceToType: function (value, type) {
     // function that converts given value to a given type
     try{
-        switch (typeof type) {
+        switch (type) {
             case 'string':
                 return this.stringifyValue(value)
             case 'number':
@@ -95,16 +100,5 @@ const AdvancedDataTransformation = {
         throw new Error("argument cannot be converted into given type")
     }   
     throw new Error("argument cannot be converted into given type")
-},
-    concatValues: function (value1,value2) {
-    // additional function to concat values as strings
-    const type = typeof value1
-    const result = this.stringifyValue(value1).concat(this.stringifyValue(value2))
-    try{
-        return this.coerceToType(result, type)   // in the end, result is converted to type of the first value if possible
-    }
-    catch(err){
-        return result // if converting back to type of the first value is not possible, function returns result as a string  
-    } 
 },
 }
