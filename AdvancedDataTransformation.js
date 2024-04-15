@@ -27,10 +27,6 @@ const AdvancedDataTransformation = {
     else {
         throw new Error("Values have different types")
     }
-    // if(typeof(result)!=='bigint' && isNaN(result)){  // checking for NaN
-    //     throw new Error("Addition of these values results in NaN")
-    // }
-    //     return result
     },
 
     invertBoolean: function (value) {
@@ -104,15 +100,3 @@ const AdvancedDataTransformation = {
 },
 }
 
-console.log(AdvancedDataTransformation.addValues(2,3))
-console.log(AdvancedDataTransformation.addValues("23.12","13.12"))
-console.log(AdvancedDataTransformation.addValues(false,true))
-console.log(AdvancedDataTransformation.addValues(BigInt(123),BigInt(123)))
-// console.log(AdvancedDataTransformation.addValues("213",123))
-console.log(AdvancedDataTransformation.addValues(NaN,4))
-//console.log(BigInt(NaN))
-// // console.log(isNaN("123adc"))
-// // console.log(parseInt("123abc312"))
-// console.log(1/0)
-//console.log(AdvancedDataTransformation.addValues([1,2,3],[1,2,3]))
-console.log(isNaN([1,2,3]))
