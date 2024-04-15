@@ -1,23 +1,24 @@
 const AdvancedDataTransformation = {
     addValues: function (value1, value2) {
-    let result = 0
     // function to add arguments having different data types
+    // checking for NaN
+    if(typeof value1 !== 'bigint' || typeof value2 !== 'bigint'){
+        if(isNaN(value1) || isNaN(value2)){
+            throw new Error ("Invalid value")
+        }
+    } 
     // checking if both values are the same type
     if(typeof value1 === typeof value2){
         try{ 
             switch(typeof value1){ // adding numberical values in both types and converting the result to a previous type          
             case 'number':
-                result = value1 + value2
-                break
+                return value1 + value2
             case 'string':
-                result = this.stringifyValue(this.convertToNumber(value1)+this.convertToNumber(value2)) 
-                break
+                return this.stringifyValue(this.convertToNumber(value1)+this.convertToNumber(value2)) 
             case 'boolean':
-                result = this.coerceToType(this.convertToNumber(value1)+this.convertToNumber(value2),'boolean')
-                break
+                return this.coerceToType(this.convertToNumber(value1)+this.convertToNumber(value2),'boolean')         
             case 'bigint': 
-                result = value1 + value2
-                break
+                return value1 + value2             
         }}
         catch (err){
             throw new Error("Function does not support addition of these values")
@@ -26,10 +27,10 @@ const AdvancedDataTransformation = {
     else {
         throw new Error("Values have different types")
     }
-    if(typeof(result)!=='bigint' && isNaN(result)){  // checking for NaN
-        throw new Error("Addition of these values results in NaN")
-    }
-        return result
+    // if(typeof(result)!=='bigint' && isNaN(result)){  // checking for NaN
+    //     throw new Error("Addition of these values results in NaN")
+    // }
+    //     return result
     },
 
     invertBoolean: function (value) {
@@ -102,3 +103,16 @@ const AdvancedDataTransformation = {
     throw new Error("argument cannot be converted into given type")
 },
 }
+
+console.log(AdvancedDataTransformation.addValues(2,3))
+console.log(AdvancedDataTransformation.addValues("23.12","13.12"))
+console.log(AdvancedDataTransformation.addValues(false,true))
+console.log(AdvancedDataTransformation.addValues(BigInt(123),BigInt(123)))
+// console.log(AdvancedDataTransformation.addValues("213",123))
+console.log(AdvancedDataTransformation.addValues(NaN,4))
+//console.log(BigInt(NaN))
+// // console.log(isNaN("123adc"))
+// // console.log(parseInt("123abc312"))
+// console.log(1/0)
+//console.log(AdvancedDataTransformation.addValues([1,2,3],[1,2,3]))
+console.log(isNaN([1,2,3]))
